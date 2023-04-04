@@ -1,11 +1,15 @@
 import requests
 import json
 import hashlib
+from dotenv import load_dotenv
 from datetime import datetime
-router_key = 'a2ffa5c9be07488bbb04a3a47d3c5f6a'
-router_pwd = 'pwd'
+import os
 
-devices_endpoint = ''
+load_dotenv()
+
+router_key = os.getenv("ROUTER_KEY")
+router_pwd = os.getenv("ROUTER_PWD")
+
 home_url = 'http://192.168.31.1/cgi-bin/luci/api/xqsystem/login'
 
 

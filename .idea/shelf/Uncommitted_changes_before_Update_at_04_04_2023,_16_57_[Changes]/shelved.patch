@@ -1,0 +1,37 @@
+Index: router_api.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import requests\nimport json\nimport hashlib\nfrom datetime import datetime\nrouter_key = 'a2ffa5c9be07488bbb04a3a47d3c5f6a'\nrouter_pwd = 'pwd'\n\ndevices_endpoint = ''\nhome_url = 'http://192.168.31.1/cgi-bin/luci/api/xqsystem/login'\n\n\ndef mi_router_session():\n    global devices_endpoint\n    sha_from_pwd = hashlib.sha1(router_pwd.encode('utf-8') + router_key.encode('utf-8')).hexdigest()\n    current_time = int(datetime.utcnow().timestamp()*1000//1)\n    nonce = \"0_a0:78:17:9d:26:91_\" + str(current_time) + \"_4478\"\n    sha_pwd = hashlib.sha1(\n        (nonce + sha_from_pwd).encode('utf-8')).hexdigest()\n    login_data = {\n        'username': 'admin',\n        'password': sha_pwd,\n        'logtype': 2,\n        'nonce': nonce\n    }\n    session = requests.session()\n    req = session.post(home_url, data=login_data)\n    token = req.json()['token']\n    devices_endpoint = f'http://192.168.31.1/cgi-bin/luci/;stok={token}/api/misystem/devicelist'\n\n    return session\n\n\ndef get_users():\n    session = mi_router_session()\n    home_page = session.get(devices_endpoint)\n    users = home_page.json()\n    users_data = []\n    for i in users['list']:\n        users_data.append(i['mac'])\n\n    return users_data\n\n\ndef save_html_temp():\n    with open(\"mi_home.txt\", \"w\") as file:\n        file.write(str(get_users()))\n        file.close()\n\n\ndef read_dump(file):\n    dump = open(file, \"r\")\n    parsed_dump = json.load(dump)\n    dump.close()\n    return parsed_dump\n\n\ndef convert_to_string():\n    our_macs = read_dump('macs_dump.json')\n    current_macs = get_users()\n    response = 'Сейчас в офисе: \\r\\n'\n\n    for mac in current_macs:\n        if mac in our_macs:\n            response += f'{our_macs[mac]}\\r\\n'\n    return response\n\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/router_api.py b/router_api.py
+--- a/router_api.py	(revision e0ca7d2afb6e6254feb666ca79d10d3fd63fca08)
++++ b/router_api.py	(date 1680104839246)
+@@ -3,7 +3,7 @@
+ import hashlib
+ from datetime import datetime
+ router_key = 'a2ffa5c9be07488bbb04a3a47d3c5f6a'
+-router_pwd = 'pwd'
++router_pwd = 'PR9kIoQV'
+ 
+ devices_endpoint = ''
+ home_url = 'http://192.168.31.1/cgi-bin/luci/api/xqsystem/login'
+Index: requirements.txt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>aiogram==2.25.1\naiohttp==3.8.4\naiosignal==1.3.1\nasync-timeout==4.0.2\nattrs==21.4.0\nBabel==2.9.1\ncertifi==2021.10.8\ncharset-normalizer==2.0.12\ndistlib==0.3.4\nfilelock==3.7.0\nfrozenlist==1.3.3\ngreenlet==1.1.2\nidna==3.3\niniconfig==1.1.1\nmagic-filter==1.0.9\nmultidict==6.0.4\npackaging==21.3\nplatformdirs==2.5.2\nplaywright==1.22.0\npluggy==1.0.0\npmbootstrap==1.50.1\nprogress==1.6\npy==1.11.0\npyee==8.1.0\npyparsing==3.0.9\npyTelegramBotAPI==4.4.0\npytest==7.1.2\npytest-base-url==2.0.0\npytest-playwright==0.3.0\npython-slugify==6.1.2\npytz==2023.3\nrequests==2.27.1\nsix==1.16.0\ntext-unidecode==1.3\ntomli==2.0.1\nurllib3==1.26.9\nvirtualenv==20.14.1\nwebsockets==10.1\nyarl==1.8.2\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/requirements.txt b/requirements.txt
+--- a/requirements.txt	(revision e0ca7d2afb6e6254feb666ca79d10d3fd63fca08)
++++ b/requirements.txt	(date 1680102681433)
+@@ -27,6 +27,7 @@
+ pytest==7.1.2
+ pytest-base-url==2.0.0
+ pytest-playwright==0.3.0
++python-dotenv==1.0.0
+ python-slugify==6.1.2
+ pytz==2023.3
+ requests==2.27.1

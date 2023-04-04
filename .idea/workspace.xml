@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AnalysisUIOptions">
+    <option name="ANALYZE_INJECTED_CODE" value="false" />
+    <option name="SCOPE_TYPE" value="3" />
+  </component>
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="bbd91344-77e4-444d-9a93-e6fc9ff0cc28" name="Changes" comment="feat(tg, router): Замена хардкода на переменные окружения">
+      <change beforePath="$PROJECT_DIR$/router_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/router_api.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tg_bot.py" beforeDir="false" afterPath="$PROJECT_DIR$/tg_bot.py" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="UPDATE_TYPE" value="REBASE" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="2Nb9h0n16CaHNLmKttyRZ7Fj4w4" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "last_opened_file_path": "/Users/kokhonovma/officestatus_bot",
+    "run.code.analysis.last.selected.profile": "pProject Default",
+    "settings.editor.selected.configurable": "configurable.group.project"
+  }
+}]]></component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="bbd91344-77e4-444d-9a93-e6fc9ff0cc28" name="Changes" comment="" />
+      <created>1679922029780</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1679922029780</updated>
+    </task>
+    <task id="LOCAL-00001" summary="feat: Добавить базовый функционал">
+      <created>1680101078175</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1680101078175</updated>
+    </task>
+    <task id="LOCAL-00002" summary="feat: Добавить базовый функционал">
+      <created>1680102089730</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1680102089730</updated>
+    </task>
+    <task id="LOCAL-00003" summary="feat(tg): Заменить ресурс для получения IP">
+      <created>1680616886712</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1680616886712</updated>
+    </task>
+    <task id="LOCAL-00004" summary="fix(tg): Убрать кавычки в возврате IP">
+      <created>1680617075077</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1680617075077</updated>
+    </task>
+    <task id="LOCAL-00005" summary="fix(tg): Убрать кавычки в возврате IP [2]">
+      <created>1680617473440</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1680617473440</updated>
+    </task>
+    <task id="LOCAL-00006" summary="feat(tg, router): Замена хардкода на переменные окружения">
+      <created>1680618766518</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1680618766519</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
+    <servers />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="feat: Добавить базовый функционал" />
+    <MESSAGE value="feat(tg): Заменить ресурс для получения IP" />
+    <MESSAGE value="fix(tg): Убрать кавычки в возврате IP" />
+    <MESSAGE value="fix(tg): Убрать кавычки в возврате IP [2]" />
+    <MESSAGE value="feat(tg, router): Замена хардкода на переменные окружения" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat(tg, router): Замена хардкода на переменные окружения" />
+  </component>
+</project>

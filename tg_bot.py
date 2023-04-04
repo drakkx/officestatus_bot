@@ -1,10 +1,14 @@
+import requests
 import router_api
+import os
+from dotenv import load_dotenv
 from aiogram import Bot, Dispatcher, executor
 from aiogram.types import InlineQuery, \
     InputTextMessageContent, InlineQueryResultArticle, Message
 
-API_TOKEN = 'bot_token'
-bot = Bot(token=API_TOKEN)
+load_dotenv()
+
+bot = Bot(token=os.getenv("BOT_API_TOKEN"))
 dp = Dispatcher(bot)
 
 
@@ -12,6 +16,11 @@ dp = Dispatcher(bot)
 async def send_welcome(message: Message):
     await message.reply("Привет!\nЯ Эхо-бот от Skillbox!\nОтправь мне любое сообщение, а я тебе обязательно отвечу.")
 
+@dp.message_handler(commands=['getip'])
+async def send_ip(message: Message):
+    ip_response = requests.get('https://ipv4-internet.yandex.net/api/v0/ip').text
+
+    await message.answer(ip_response[1:-1])
 
 @dp.message_handler()
 async def echo(message: Message):
