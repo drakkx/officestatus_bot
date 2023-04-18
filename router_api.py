@@ -9,7 +9,6 @@ load_dotenv()
 
 router_key = os.getenv("ROUTER_KEY")
 router_pwd = os.getenv("ROUTER_PWD")
-
 home_url = 'http://192.168.31.1/cgi-bin/luci/api/xqsystem/login'
 
 
@@ -59,12 +58,15 @@ def read_dump(file):
 
 
 def convert_to_string():
+    guests = 'Гостей нет'
     our_macs = read_dump('macs_dump.json')
     current_macs = get_users()
     response = 'Сейчас в офисе: \r\n'
-
+    checked_names = []
     for mac in current_macs:
-        if mac in our_macs:
-            response += f'{our_macs[mac]}\r\n'
-    return response
+        for name in our_macs:
+            if mac in our_macs[name] and name not in checked_names:
+                checked_names.append(name)
+                response += f'{name}\r\n'
+    return response+guests
 
