@@ -44,12 +44,6 @@ def get_users():
     return users_data
 
 
-def save_html_temp():
-    with open("mi_home.txt", "w") as file:
-        file.write(str(get_users()))
-        file.close()
-
-
 def read_dump(file):
     dump = open(file, "r")
     parsed_dump = json.load(dump)
