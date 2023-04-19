@@ -33,7 +33,14 @@ def mi_router_session():
     return session
 
 
-def get_users():
+def read_dump(file):
+    dump = open(file, "r")
+    parsed_dump = json.load(dump)
+    dump.close()
+    return parsed_dump
+
+
+def get_active_macs():
     session = mi_router_session()
     home_page = session.get(devices_endpoint)
     users = home_page.json()
@@ -44,29 +51,28 @@ def get_users():
     return users_data
 
 
-def save_html_temp():
-    with open("mi_home.txt", "w") as file:
-        file.write(str(get_users()))
-        file.close()
-
-
-def read_dump(file):
-    dump = open(file, "r")
-    parsed_dump = json.load(dump)
-    dump.close()
-    return parsed_dump
+def get_all_known_macs(dump):
+    known_macs_list = []
+    for name in dump:
+        known_macs_list += dump[name]
+    return known_macs_list
 
 
 def convert_to_string():
-    guests = 'Гостей нет'
+    guests_count = 0
     our_macs = read_dump('macs_dump.json')
-    current_macs = get_users()
-    response = 'Сейчас в офисе: \r\n'
+    current_macs = get_active_macs()
+    response = ''
     checked_names = []
+    total_macs_list = get_all_known_macs(our_macs)
     for mac in current_macs:
         for name in our_macs:
-            if mac in our_macs[name] and name not in checked_names:
+            if mac in our_macs[name] and name not in checked_names and name != "Devices":
                 checked_names.append(name)
                 response += f'{name}\r\n'
-    return response+guests
-
+    for mac in current_macs:
+        if mac not in total_macs_list:
+            guests_count += 1
+    if response == '':
+        response = 'никого, даже '
+    return f'Сейчас в офисе..\r\n{response}гостей {str(guests_count)}'
