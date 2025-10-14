@@ -19,7 +19,7 @@ def save_notify_chat(chat_id: int):
     with open(NOTIFY_CHAT_FILE, "w") as f:
         f.write(str(chat_id))
 
-def load_notify_chat() -> int | None:
+def load_notify_chat():
     try:
         with open(NOTIFY_CHAT_FILE, "r") as f:
             return int(f.read().strip())
