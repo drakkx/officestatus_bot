@@ -76,3 +76,20 @@ def convert_to_string():
     if response == '':
         response = 'никого, даже '
     return f'Сейчас в офисе..\r\n{response}гостей {str(guests_count)}'
+
+def get_present_people():
+    """Возвращает список имён присутствующих сотрудников (без гостей)."""
+    our_macs = read_dump('macs_dump.json')
+    current_macs = get_active_macs()
+    present = []
+    seen_names = set()
+
+    for mac in current_macs:
+        for name, mac_list in our_macs.items():
+            if name == "Devices":
+                continue
+            if mac in mac_list and name not in seen_names:
+                present.append(name)
+                seen_names.add(name)
+                break  # один MAC — одно имя
+    return present
