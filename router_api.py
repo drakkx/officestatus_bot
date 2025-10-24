@@ -16,7 +16,7 @@ def mi_router_session():
     global devices_endpoint
     sha_from_pwd = hashlib.sha1(router_pwd.encode('utf-8') + router_key.encode('utf-8')).hexdigest()
     current_time = int(datetime.utcnow().timestamp()*1000//1)
-    nonce = "0_a0:78:17:9d:26:91_" + str(current_time) + "_4478"
+    nonce = "0_b8:27:eb:9b:89:2d_" + str(current_time) + "_4478"
     sha_pwd = hashlib.sha1(
         (nonce + sha_from_pwd).encode('utf-8')).hexdigest()
     login_data = {
