@@ -40,12 +40,12 @@ async def monitor_presence():
                 # 1. Кто пришёл?
                 newly_arrived = current_people - last_present
                 for person in newly_arrived:
-                    await bot.send_message(chat_id, f"👋 {person} пришёл(ла) в офис!")
+                    await bot.send_message(chat_id, f"👋 {person} пришёл в офис!")
 
                 # 2. Кто ушёл?
                 just_left = last_present - current_people
                 for person in just_left:
-                    await bot.send_message(chat_id, f"🚪 {person} ушёл(ла) из офиса.")
+                    await bot.send_message(chat_id, f"🚪 {person} ушёл из офиса.")
 
                 # 3. Офис стал пустым (и раньше не был пустым)?
                 is_now_empty = len(current_people) == 0
