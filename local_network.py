@@ -1,0 +1,102 @@
+import requests
+import json
+import hashlib
+from dotenv import load_dotenv
+from datetime import datetime
+import os
+
+load_dotenv()
+
+def read_dump(file):
+    dump = open(file, "r")
+    parsed_dump = json.load(dump)
+    dump.close()
+    return parsed_dump
+
+def get_active_macs():
+    """
+    Получает список активных MAC-адресов из ARP-таблицы с помощью 'ip neigh show'.
+    Возвращает список строк в формате 'xx:xx:xx:xx:xx:xx'.
+    """
+    try:
+        scan_network_with_nmap()
+        # Выполняем команду 'ip neigh show'
+        result = subprocess.run(['ip', 'neigh', 'show'],
+                                capture_output=True,
+                                text=True,
+                                check=True)
+        output = result.stdout
+    except (subprocess.CalledProcessError, FileNotFoundError):
+        # Если команда недоступна (например, на Windows или нет прав)
+        return []
+
+    # Регулярное выражение для поиска MAC-адресов вида xx:xx:xx:xx:xx:xx
+    mac_pattern = re.compile(r'([0-9a-fA-F]{1,2}:){5}[0-9a-fA-F]{1,2}')
+    macs = mac_pattern.findall(output)
+
+    # findall возвращает кортежи из-за группировки, поэтому извлекаем полные совпадения
+    # Лучше использовать finditer или убрать захватывающие скобки
+    # Исправим: уберём скобки вокруг повторяющейся части
+    mac_pattern_fixed = re.compile(r'(?:[0-9a-fA-F]{1,2}:){5}[0-9a-fA-F]{1,2}')
+    macs = mac_pattern_fixed.findall(output)
+    macs_upper = [mac.upper() for mac in macs]
+    return macs_upper
+
+def scan_network_with_nmap(subnet="192.168.31.1/24"):
+    try:
+        result = subprocess.run(
+            ["nmap", "-sn", subnet],  # -sn = ping scan (no port scan)
+            capture_output=True,
+            text=True,
+            check=True  # выбросит исключение, если nmap завершится с ошибкой
+        )
+        return result.stdout
+    except FileNotFoundError:
+        print("Ошибка: nmap не установлен или не найден в PATH.")
+        return None
+    except subprocess.CalledProcessError as e:
+        print(f"nmap завершился с ошибкой: {e}")
+        return None
+
+def get_all_known_macs(dump):
+    known_macs_list = []
+    for name in dump:
+        known_macs_list += dump[name]
+    return known_macs_list
+
+
+def who_is_here_string():
+    guests_count = 0
+    our_macs = read_dump('macs_dump.json')
+    current_macs = get_active_macs()
+    response = ''
+    checked_names = []
+    total_macs_list = get_all_known_macs(our_macs)
+    for mac in current_macs:
+        for name in our_macs:
+            if mac in our_macs[name] and name not in checked_names and name != "Devices":
+                checked_names.append(name)
+                response += f'{name}\r\n'
+    for mac in current_macs:
+        if mac not in total_macs_list:
+            guests_count += 1
+    if response == '':
+        response = 'никого, даже '
+    return f'Сейчас в офисе..\r\n{response}гостей {str(guests_count)}'
+
+def get_present_people():
+    """Возвращает список имён присутствующих сотрудников (без гостей)."""
+    our_macs = read_dump('macs_dump.json')
+    current_macs = get_active_macs()
+    present = []
+    seen_names = set()
+
+    for mac in current_macs:
+        for name, mac_list in our_macs.items():
+            if name == "Devices":
+                continue
+            if mac in mac_list and name not in seen_names:
+                present.append(name)
+                seen_names.add(name)
+                break  # один MAC — одно имя
+    return present
