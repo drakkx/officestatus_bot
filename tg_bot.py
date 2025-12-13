@@ -1,5 +1,5 @@
 import requests
-import router_api
+import local_network
 import os
 import asyncio
 import json
@@ -33,7 +33,7 @@ async def monitor_presence():
     global last_present, last_was_empty
     while True:
         try:
-            current_people = set(router_api.get_present_people())
+            current_people = set(local_network.get_present_people())
             chat_id = load_notify_chat()
 
             if chat_id:
@@ -52,7 +52,7 @@ async def monitor_presence():
                 if is_now_empty and not last_was_empty and len(last_present) > 0:
                     await bot.send_message(chat_id, "🕗 Офис опустел...")
 
-                last_was_empty = is_now_empty
+                last_was_empty = dw
 
             last_present = current_people
 
@@ -83,7 +83,7 @@ async def send_ip(message: Message):
 
 @dp.message_handler(commands=['whoishere'])
 async def who_is_here(message: Message):
-    response = router_api.convert_to_string()
+    response = local_network.who_is_here_string()
     await message.answer(response)
 
 @dp.message_handler(commands=['setnotify'])
