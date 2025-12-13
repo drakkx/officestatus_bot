@@ -1,9 +1,8 @@
 import requests
 import json
-import hashlib
 from dotenv import load_dotenv
-from datetime import datetime
 import os
+import subprocess
 
 load_dotenv()
 
