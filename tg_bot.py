@@ -52,7 +52,7 @@ async def monitor_presence():
                 if is_now_empty and not last_was_empty and len(last_present) > 0:
                     await bot.send_message(chat_id, "🕗 Офис опустел...")
 
-                last_was_empty = dw
+                last_was_empty = is_now_empty
 
             last_present = current_people
 
