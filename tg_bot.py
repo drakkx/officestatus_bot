@@ -3,10 +3,11 @@ import local_network
 import os
 import asyncio
 import json
+import aiohttp
 from dotenv import load_dotenv
 from aiogram import Bot, Dispatcher, executor
 from aiogram.types import Message
-
+from aiogram.utils.executor import start_polling
 load_dotenv()
 
 bot = Bot(token=os.getenv("BOT_API_TOKEN"))
@@ -97,10 +98,53 @@ async def echo(message: Message):
 
 # === Запуск ===
 
+async def on_startup(dp):
+    """Запускается при старте бота"""
+    global notified_about_disconnect
+    notified_about_disconnect = False
+    # Можно отправить "Бот запущен", но не обязательно
+    chat_id = load_notify_chat()
+    if chat_id:
+        try:
+            await bot.send_message(chat_id, "✅ Бот офиса запущен и работает.")
+        except:
+            pass
+
+async def safe_start_polling():
+    """Запуск polling с обработкой таймаутов и уведомлением о проблемах"""
+    global notified_about_disconnect
+
+    while True:
+        try:
+            await start_polling(
+                dp,
+                on_startup=on_startup,
+                skip_updates=True,
+                timeout=20,          # Таймаут запроса к Telegram
+                relax=0.1,           # Пауза между запросами
+                fast=True
+            )
+        except (aiohttp.ClientError, asyncio.TimeoutError) as e:
+            chat_id = load_notify_chat()
+            if chat_id and not notified_about_disconnect:
+                try:
+                    await bot.send_message(
+                        chat_id,
+                        "⚠️ Проблема с подключением к Telegram.\n"
+                        "Бот пытается восстановить соединение..."
+                    )
+                    notified_about_disconnect = True
+                except:
+                    # Если не удалось отправить — молча продолжаем
+                    pass
+
+            print(f"[NETWORK] Потеряно соединение с Telegram: {e}. Повторная попытка через 10 сек...")
+            await asyncio.sleep(10)  # ждём перед повтором
+        except Exception as e:
+            print(f"[CRITICAL] Непредвиденная ошибка: {e}")
+            await asyncio.sleep(5)
+
 if __name__ == '__main__':
-    # Запускаем фоновую задачу мониторинга
     loop = asyncio.get_event_loop()
     loop.create_task(monitor_presence())
-    
-    # Запускаем бота
-    executor.start_polling(dp, skip_updates=True)
+    loop.run_until_complete(safe_start_polling())
